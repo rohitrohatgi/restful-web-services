@@ -16,6 +16,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<docker.image.prefix>springio</docker.image.prefix>
 	</properties>
 
 	<dependencies>
@@ -91,11 +92,18 @@
 					</execution>
 				</executions>
 				<configuration>
-					<repository>spotify/foobar</repository>
+					<!-- NOTE: These Environment Variables Need to be set for Docker Toolbox on your machine DOCKER_CERT_PATH=/Users/adrianmilne/.docker/machine/machines/default DOCKER_HOST=https://192.168.99.100:2376 -->
+					<repository>rohit</repository> <!-- ${project.artifactId} is a good choice -->
 					<tag>${project.version}</tag>
-					<buildArgs>
-						<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-					</buildArgs>
+					<imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+					<dockerDirectory>src/main/docker</dockerDirectory>
+					<resources>
+						<resource>
+							<targetPath>/</targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.jar</include>
+						</resource>
+					</resources>
 				</configuration>
 			</plugin>
 		</plugins>
